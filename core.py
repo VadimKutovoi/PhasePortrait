@@ -4,40 +4,47 @@ import random
 
 
 def f(x, y):
-    return -x * (1 + x * y) - 2 * y
+    return y
 
 
 def g(x, y):
-    return x + y
+    return -x - y * y * y
 
 
 if __name__ == '__main__':
+    Y = []
+    X = []
+
     for i in range(0, 150):
         Xo = random.randint(-15, 15)
         Yo = random.randint(-15, 15)
-        Y = []
-        X = []
+        _X, _Y = [], []
+        _X.append(Xo)
+        _Y.append(Yo)
+
         h = 0.001
-        for i in range(0, 100):
+        for i in range(0, 10000):
             k1 = h * f(Xo, Yo)
             q1 = h * g(Xo, Yo)
 
-            k2 = h * f(Xo + k1 / 2.0, Yo + q1 / 2.0)
-            q2 = h * g(Xo + k1 / 2.0, Yo + q1 / 2.0)
+            k2 = f(Xo + k1 * h / 2.0, Yo + q1 * h / 2.0)
+            q2 = g(Xo + k1 * h / 2.0, Yo + q1 * h / 2.0)
 
-            k3 = h * f(Xo + k2 / 2.0, Yo + q2 / 2.0)
-            q3 = h * g(Xo + k2 / 2.0, Yo + q2 / 2.0)
+            k3 = f(Xo + k2 * h / 2.0, Yo + q2 * h / 2.0)
+            q3 = g(Xo + k2 * h / 2.0, Yo + q2 * h / 2.0)
 
-            k4 = h * f(Xo + k3, Yo + q3)
-            q4 = h * g(Xo + k3, Yo + q3)
+            k4 = f(Xo + h * k3, Yo + h * q3)
+            q4 = g(Xo + h * k3, Yo + h *q3)
 
-            Xo = Xo + (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0
-            Yo = Yo + (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0
+            Xo = Xo + h * (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0
+            Yo = Yo + h * (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0
 
-            X.append(Xo)
-            Y.append(Yo)
+            _X.append(Xo)
+            _Y.append(Yo)
+        X.append(_X)
+        Y.append(_Y)
 
-
-        plt.plot(X, Y)
-
+    #print(X, Y)
+    for i in range(len(X)):
+        plt.plot(X[i], Y[i], color='blue')
     plt.show()
